@@ -410,3 +410,26 @@ body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #333; }
   .list-group .file-row { grid-template-columns: 1fr 90px 80px 36px; }
 }
 
+
+8) filespanel.css
+
+
+.files-panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 15px;
+}
+
+.files-panel table {
+  width: 100%;
+}
+
+.placeholder-box {
+  width: 80px;
+  height: 15px;
+  background: #eee;
+  border-radius: 3px;
+}
+
+
