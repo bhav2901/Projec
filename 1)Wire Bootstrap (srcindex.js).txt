@@ -1,0 +1,412 @@
+1)Wire Bootstrap (src/index.js)
+
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+/* Bootstrap core + icons */
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Your styles migrated from the working HTML version */
+import "./index.css";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+
+
+2)HTML shell (public/index.html)
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>User Dashboard</title>
+  </head>
+  <body class="bg-light">
+    <div id="root"></div>
+  </body>
+</html>
+
+
+
+3)App layout (src/App.js)
+
+import React from "react";
+import Sidebar from "./components/Sidebar";
+import TopBlue from "./components/TopBlue";
+import FilesPanel from "./components/FilesPanel";
+
+export default function App() {
+  return (
+    <div className="bg-light">
+      {/* Page title (same as your HTML) */}
+      <header className="py-2 text-center user-title">
+        <h1 className="mb-0">User Dashboard</h1>
+      </header>
+
+      <div className="container-fluid px-4">
+        <div className="row gx-3">
+          {/* LEFT: Sidebar */}
+          <aside className="col-md-3 col-lg-2 pe-0">
+            <div className="sidebar border rounded-start shadow-sm bg-white">
+              <div className="p-3">
+                <Sidebar />
+              </div>
+            </div>
+          </aside>
+
+          {/* RIGHT: Main */}
+          <main className="col-md-9 col-lg-10">
+            <TopBlue />
+            <FilesPanel />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+4) Sidebar (src/components/Sidebar.js)
+
+import React, { useState } from "react";
+
+/**
+ * Matches your folder tree:
+ * - SCB
+ * - General (collapsible)
+ *   - Reports (collapsible)
+ * - Credit
+ *   - General (collapsible)
+ */
+export default function Sidebar() {
+  const [openGeneral, setOpenGeneral] = useState(true);
+  const [openReports, setOpenReports] = useState(false);
+  const [openCreditGeneral, setOpenCreditGeneral] = useState(false);
+
+  return (
+    <>
+      {/* small logo top-left (kept your SVG) */}
+      <div className="mb-3 d-flex align-items-center">
+        <svg width="28" height="28" viewBox="0 0 24 24" className="me-2">
+          <path fill="#2eacd1" d="M2 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10S2 17.5 2 12z"/>
+          <path fill="#fff" d="M7 8l5 8 5-8z"/>
+        </svg>
+        <span className="fw-semibold">SCB</span>
+      </div>
+
+      <div className="folder-tree">
+        {/* SCB root */}
+        <div className="folder-item">
+          <div className="d-flex align-items-center">
+            <i className="bi bi-folder2-fill folder-icon"></i>
+            <span className="fw-medium">SCB</span>
+          </div>
+        </div>
+
+        {/* General group */}
+        <div className="folder-group mt-3">
+          <button
+            className="btn btn-toggle w-100 text-start d-flex align-items-center"
+            onClick={() => setOpenGeneral(v => !v)}
+          >
+            <i className="bi bi-folder me-2"></i>
+            <span>General</span>
+            <i className={`bi ms-auto rotate-icon ${openGeneral ? "bi-caret-down-fill rotated" : "bi-caret-right-fill"}`}></i>
+          </button>
+
+          {openGeneral && (
+            <div className="ps-3 pt-2">
+              <button
+                className="btn btn-toggle w-100 text-start d-flex align-items-center"
+                onClick={() => setOpenReports(v => !v)}
+              >
+                <i className="bi bi-folder me-2"></i>
+                <span>Reports</span>
+                <i className={`bi ms-auto rotate-icon-small ${openReports ? "bi-caret-down-fill rotated" : "bi-caret-right-fill"}`}></i>
+              </button>
+              {openReports && (
+                <div className="ps-3 pt-2">
+                  <div className="small text-muted">(no items)</div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Credit group */}
+        <div className="mt-3">
+          <div className="d-flex align-items-center">
+            <i className="bi bi-folder2-fill folder-icon"></i>
+            <span className="fw-medium">Credit</span>
+          </div>
+
+          <div className="mt-2 ps-3">
+            <button
+              className="btn btn-toggle w-100 text-start d-flex align-items-center"
+              onClick={() => setOpenCreditGeneral(v => !v)}
+            >
+              <i className="bi bi-folder me-2"></i>
+              <span>General</span>
+              <i className={`bi ms-auto rotate-icon-small ${openCreditGeneral ? "bi-caret-down-fill rotated" : "bi-caret-right-fill"}`}></i>
+            </button>
+            {openCreditGeneral && (
+              <div className="ps-3 pt-2">
+                <div className="small text-muted">(empty)</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+
+5) Top blue bar (src/components/TopBlue.js)
+
+import React from "react";
+
+export default function TopBlue() {
+  const onLogout = () => alert("Logout clicked (demo).");
+  const onFav = () => alert("Favorite clicked (demo).");
+  const onDownloadAll = () => alert("Download all clicked (demo).");
+
+  return (
+    <div className="top-blue mb-2 rounded">
+      <div className="container-fluid d-flex align-items-center justify-content-end">
+        <div className="me-3 icon-btn" title="Notifications"><i className="bi bi-bell"></i></div>
+        <div className="me-3 icon-btn" title="Messages"><i className="bi bi-envelope"></i></div>
+        <div className="me-3 icon-btn" title="Profile"><i className="bi bi-person-circle"></i></div>
+        <button onClick={onLogout} className="btn btn-dark btn-sm">Logout</button>
+      </div>
+    </div>
+  );
+}
+
+
+6) Files panel (src/components/FilesPanel.js)
+
+
+import React, { useMemo, useState } from "react";
+
+/** Demo data = exactly your initial JS array */
+const initialFiles = [
+  { title: "Account Statement - Jan 2025", type: "PDF",  date: "2025-01-20" },
+  { title: "Monthly Report - Dec 2024",   type: "XLSX", date: "2024-12-31" },
+  { title: "Loan Summary 2024",          type: "PDF",  date: "2024-11-12" },
+  { title: "Credit Report - Oct",        type: "PDF",  date: "2024-10-05" },
+  { title: "Summary - Q3 2024",          type: "DOCX", date: "2024-09-30" }
+];
+
+export default function FilesPanel() {
+  const [query, setQuery] = useState("");
+  const [sortAsc, setSortAsc] = useState(false); // matches currentSortAsc = false
+  const [fav, setFav] = useState(false);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const base = q
+      ? initialFiles.filter(
+          f =>
+            f.title.toLowerCase().includes(q) ||
+            f.type.toLowerCase().includes(q)
+        )
+      : initialFiles.slice();
+
+    base.sort((a, b) => {
+      const da = new Date(a.date);
+      const db = new Date(b.date);
+      return sortAsc ? da - db : db - da;
+    });
+
+    return base;
+  }, [query, sortAsc]);
+
+  const downloadOne = (file) => {
+    alert("Download triggered for: " + file.title);
+    // In a real app, you would trigger an actual download here.
+  };
+
+  const downloadAll = () => {
+    alert("Download all clicked (demo).");
+    // You can loop filtered.forEach(downloadOne) to simulate all.
+  };
+
+  return (
+    <div className="card content-card shadow-sm">
+      {/* Blue header strip with search + fav + download all */}
+      <div className="card-header bg-primary text-white rounded-top d-flex align-items-center">
+        <div className="flex-grow-1">
+          <div className="search-pill">
+            <div className="input-group">
+              <span className="input-group-text bg-white border-0">
+                <i className="bi bi-search"></i>
+              </span>
+              <input
+                id="searchInput"
+                type="search"
+                className="form-control border-0"
+                placeholder="Search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="ms-3 d-flex align-items-center gap-2">
+          <button
+            id="favBtn"
+            className="btn btn-outline-light btn-sm"
+            onClick={() => setFav(v => !v)}
+            title="Favorite"
+          >
+            <i className={`bi ${fav ? "bi-heart-fill" : "bi-heart"}`}></i>
+          </button>
+          <button
+            id="downloadAll"
+            className="btn btn-outline-light btn-sm"
+            onClick={downloadAll}
+            title="Download all"
+          >
+            <i className="bi bi-download"></i>
+          </button>
+        </div>
+      </div>
+
+      <div className="card-body p-4">
+        {/* folder header with Date sort toggle (Type label kept static to match UI) */}
+        <div className="d-flex align-items-center mb-3">
+          <i className="bi bi-folder2-open display-6 text-secondary me-2"></i>
+          <h4 className="mb-0">General</h4>
+
+          <div className="ms-auto d-flex align-items-center gap-2">
+            <div className="me-2">Type <i className="bi bi-caret-down-fill small"></i></div>
+            <div>
+              Date{" "}
+              <button
+                id="sortDateBtn"
+                className="btn btn-link btn-sm p-0 ms-1"
+                onClick={() => setSortAsc(v => !v)}
+                title="Toggle date sort"
+              >
+                <i className={`bi ${sortAsc ? "bi-caret-up-fill" : "bi-caret-down-fill"}`}></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* table header */}
+        <div className="row small text-muted mb-2">
+          <div className="col-7">Title</div>
+          <div className="col-2">Type</div>
+          <div className="col-2">Date</div>
+          <div className="col-1 text-end"></div>
+        </div>
+
+        {/* file list (kept your grid row structure and classes) */}
+        <div id="fileList" className="list-group mb-3">
+          {filtered.map((f, idx) => (
+            <div className="file-row list-group-item" key={idx}>
+              <div className="file-title">
+                <div className="file-square"></div>
+                <div>
+                  <div>{f.title}</div>
+                  {/* kept a muted subtitle row; replaced the old regex no-op with a repeat of title (or add metadata here) */}
+                  <div className="small text-muted">{f.title}</div>
+                </div>
+              </div>
+              <div className="text-muted">{f.type}</div>
+              <div className="text-muted">{f.date}</div>
+              <div className="text-end">
+                <button
+                  className="download-circle"
+                  onClick={() => downloadOne(f)}
+                  title="Download"
+                >
+                  <i className="bi bi-download"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* pagination / page number (kept static 'page 1 ▸' like original) */}
+        <div className="d-flex justify-content-end align-items-center small text-muted">
+          <span className="me-2">page</span>
+          <span className="page-pill">1</span>
+          <button className="btn btn-link btn-sm p-0 ms-2" title="Next page">
+            <i className="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+7) Styles (src/index.css)
+
+/* fonts & base */
+body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #333; }
+.user-title h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
+
+/* sidebar */
+.sidebar { min-height: 75vh; border-right: 1px solid #ddd; }
+.folder-icon { color: #264653; font-size: 20px; margin-right: 8px; }
+.btn-toggle { background: transparent; border: none; padding: .25rem .5rem; color: #222; }
+.btn-toggle:focus { outline: none; box-shadow: none; }
+.rotate-icon { font-size: .85rem; transform: rotate(0deg); transition: transform .15s; color: #7b7b7b; }
+.rotate-icon-small { font-size: .7rem; color: #7b7b7b; }
+/* NEW: actually rotate when open */
+.rotate-icon.rotated { transform: rotate(180deg); }
+.rotate-icon-small.rotated { transform: rotate(90deg); }
+
+/* top blue bar */
+.top-blue { height: 62px; background: #2f97d2; color: #fff; border-radius: 6px; margin-top: .6rem; box-shadow: inset 0 -1px rgba(0,0,0,.05); }
+.icon-btn { color: rgba(255,255,255,.95); font-size: 1.15rem; padding: .35rem .5rem; cursor: pointer; }
+.icon-btn:hover { opacity: .9; }
+
+/* content card */
+.content-card { border-radius: 8px; margin-top: -20px; overflow: hidden; }
+.card-header .search-pill { max-width: 480px; }
+.input-group .form-control { background: transparent; color: #fff; }
+.input-group .input-group-text { background: rgba(255,255,255,.18); border-radius: 30px 0 0 30px; border: none; color: #fff; }
+.search-pill .form-control::placeholder { color: rgba(255,255,255,.85); }
+
+.card-header { padding: 14px 18px; }
+
+/* folder heading */
+.card-body h4 { font-size: 1.25rem; font-weight: 500; margin-left: .2rem; }
+
+/* file rows */
+.list-group .file-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 110px 48px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+}
+.file-title { display:flex; align-items:center; gap:12px; }
+.file-square { width: 18px; height: 18px; background: #e7e7e7; border-radius: 3px; }
+.download-circle { width: 36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius: 8px; border:1px solid #e0e0e0; background:#fff; cursor:pointer; }
+.download-circle .bi { font-size: 1.05rem; color: #4a4a4a; }
+.file-row:hover { background: rgba(0,0,0,.02); }
+
+/* small page pill */
+.page-pill { display:inline-block; padding: 6px 10px; border-radius: 6px; background: #f2f2f2; color:#333; font-weight:500; }
+
+/* responsiveness */
+@media (max-width: 768px) {
+  .sidebar { display:none; }
+  .content-card { margin-top: 0; }
+  .list-group .file-row { grid-template-columns: 1fr 90px 80px 36px; }
+}
+
