@@ -1,1 +1,296 @@
-ankawnfs
+--App.js
+import React from "react";
+import Sidebar from "./components/Sidebars/Sidebar";
+import TopBlue from "./components/TopBlue";
+import FilesPanel from "./components/Filespanel/FilesPanel";
+import Downloads from "./components/Downloads";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Favorites from "./components/Favorites";
+
+export default function App() {
+  return (
+    <div className="bg-light">
+       {/* Page title (same as your HTML) */}
+      <header className="py-2 text-center user-title">
+        {/* <h1 className="mb-0">User Dashboard</h1> */}
+        {/* <img src="sc.png" class="logo-img me-2"></img> */}
+      </header>
+
+      <div className="container-fluid px-4">
+        <div className="row gx-3">
+          {/* LEFT: Sidebar */}
+                <Sidebar />
+           
+          {/* RIGHT: Main */}
+          <main className="col-md-9 col-lg-10">
+            <Navbar />
+            <div className='container'>
+              <BrowserRouter>
+               <Routes>
+                <Route path="/downloads" element={<Downloads />}></Route>
+                <Route path="/favorites" element={<Favorites />}></Route>
+               </Routes>
+              </BrowserRouter>
+            <TopBlue />
+            <FilesPanel />
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+    );
+}
+
+--index.css
+/* fonts & base */
+body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #333; }
+.user-title h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
+img{display:flex;flex-direction: column;align-items: center;padding: 10px;}
+.logo-img {
+  width: 150px; /* Ensures the image doesn't exceed its parent's width */
+  height: auto;    /* Maintains the image's aspect ratio */
+  display: flex;  /* Ensures it behaves like a block element, important for centering */
+  margin-left: 20px; /* Helps center the image horizontally */
+}
+
+/* sidebar */
+.sidebar { min-height: 140vh; border-right: 1px solid #ddd;background: #020b43 !important; }
+.folder-icon { color: white !important; font-size: 20px; margin-right: 8px; }
+.btn-toggle { background: transparent; border: none; padding: .25rem .5rem; color: #222; }
+.btn-toggle:focus { outline: none; box-shadow: none; }
+.rotate-icon { font-size: .85rem; transform: rotate(0deg); transition: transform .15s; color: #7b7b7b; }
+.rotate-icon-small { font-size: .7rem; color: #7b7b7b; }
+/* NEW: actually rotate when open */
+.rotate-icon.rotated { transform: rotate(180deg); }
+.rotate-icon-small.rotated { transform: rotate(90deg); }
+
+/* top blue bar */
+.top-blue { height: 62px; background:white; color: #fff; border-radius: 6px; margin-top: -60px; box-shadow: inset 0 -1px rgba(0,0,0,.05); }
+.icon-btn { color: black; font-size: 1.15rem; padding: .35rem .5rem; cursor: pointer; }
+.icon-btn:hover { opacity: .9; }
+
+/* content card */
+.content-card { border-radius: 8px; margin-top: -20px; overflow: hidden; min-height: 125vh;}
+.card-header .search-pill { max-width: 480px; }
+.input-group .form-control { background:white; color: black;width: 5px; }
+.input-group .input-group-text { background: rgba(255,255,255,.18); border-radius: 30px 0 0 30px; border: none; color: #fff; }
+.search-pill .form-control::placeholder { color: black; }
+
+.card-header { padding: 14px 18px; }
+
+/* folder heading */
+.card-body h4 { font-size: 1.25rem; font-weight: 500; margin-left: .2rem; }
+
+/* file rows */
+.list-group .file-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 110px 48px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+}
+.file-title { display:flex; align-items:center; gap:12px;}
+/* .file-square { width: 18px; height: 30px; background: #e7e7e7; border-radius: 3px; } */
+.download-circle { width: 36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius: 8px; border:1px solid #e0e0e0; background:#fff; cursor:pointer; }
+.download-circle .bi { font-size: 1.05rem; color: #4a4a4a; }
+.file-row:hover { background: rgba(0,0,0,.02); }
+
+/* small page pill */
+.page-pill { display:inline-block; padding: 6px 10px; border-radius: 6px; background: #f2f2f2; color:#333; font-weight:500; }
+
+/* responsiveness */
+@media (max-width: 768px) {
+  .sidebar { display:none; }
+  .content-card { margin-top: 0; }
+  .list-group .file-row { grid-template-columns: 1fr 90px 80px 36px; }
+}
+.navbar{
+  /*width: 100%;*/
+  /* display: flex; */
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 8%;
+  /* position: fixed; */
+  top: 0; /* Specifies the scroll position at which the navbar becomes sticky */
+  z-index: 10; /* Ensures the navbar stays on top of other content */
+}
+.navbar ul{
+  padding: 10px 30px;
+  border-radius: 30px;
+  box-shadow: 0 0 30px 0 rgba(0,0,0,0.1);
+  color: #000;
+}
+.navbar ul li{
+  display: inline-block;
+  padding: 5px 1-px;
+  margin: 0 10px;
+  color: #000;
+  margin-top: 10px;
+}
+a.active{
+  color:#000;
+}
+
+--TopBlue.js
+import React from "react";
+
+export default function TopBlue() {
+  const onLogout = () => alert("Logout.");
+  const onFav = () => alert("Favorite clicked (demo).");
+  const onDownloadAll = () => alert("Downloaded all (demo).");
+
+  return (
+    <div className="top-blue mb-2 rounded">
+      <div className="container-fluid d-flex align-items-center justify-content-end">
+        <div className="me-3 icon-btn" title="Notifications"><i className="bi bi-bell"></i></div>
+        <div className="me-3 icon-btn" title="Messages"><i className="bi bi-envelope"></i></div>
+        <div className="me-3 icon-btn" title="Profile"><i className="bi bi-person-circle"></i></div>
+        <button onClick={onLogout} className="btn btn-dark btn-sm">Logout</button>
+      </div>
+    </div>
+  );
+}
+
+--Navbar.js
+import React, { useState } from 'react';
+import { BrowserRouter, NavLink } from 'react-router-dom';
+import '../components/navbar.css';
+
+// ModalPopup component (can be in a separate file like modal_popup.jsx)
+const ModalPopup = ({ showModalPopup, onPopupClose, downloadLink, popupContent }) => { // Added popupContent prop
+  return (
+    <>
+      {showModalPopup && (
+        <div className="modal-overlay" onClick={() => onPopupClose(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            {popupContent ? popupContent : ( // Conditional rendering of popupContent
+              <>
+                <h2>Download Options</h2>
+                <p>Choose your download option:</p>
+                <a href={downloadLink} download="your-file.pdf">
+                  <button style={{borderWidth:1,padding:5,margin:10}}>Download File</button>
+                </a>
+                <button onClick={() => onPopupClose(false)} style={{borderWidth:2,width:450,display:'grid'}}>Close</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const Navbar = () => {
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false);
+  const [showFavoritesPopup, setShowFavoritesPopup] = useState(false); // New state for favorites popup
+
+  const toggleDownloadPopup = () => {
+    setShowDownloadPopup(!showDownloadPopup);
+  };
+
+  const toggleFavoritesPopup = () => { // New function to toggle favorites popup
+    setShowFavoritesPopup(!showFavoritesPopup);
+  };
+
+  return (
+    <BrowserRouter>
+      <ul className="nav-links">
+        <li>
+          <NavLink to="/downloads" activeClassName="active">
+            <button onClick={toggleDownloadPopup} style={{borderWidth:1,borderColor:'black'}}>Downloads</button>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/favorites" activeClassName="active">
+            <button onClick={toggleFavoritesPopup} style={{borderWidth:1,borderColor:'black'}}>Favorites</button> {/* Added onClick handler */}
+          </NavLink>
+        </li>
+      </ul>
+      <ModalPopup
+        showModalPopup={showDownloadPopup}
+        onPopupClose={toggleDownloadPopup}
+        downloadLink="/path/to/your-file.pdf" // Replace with your actual download link
+      />
+      {/* New ModalPopup for Favorites */}
+      <ModalPopup 
+        showModalPopup={showFavoritesPopup} 
+        onPopupClose={toggleFavoritesPopup} 
+        popupContent={ 
+            <> 
+                <h2>Your Favorites</h2> 
+                <p>This is your list of favorite items!</p> 
+                <button onClick={() => toggleFavoritesPopup()}>Close</button> 
+            </> 
+        } 
+      /> 
+    </BrowserRouter>
+  );
+};
+
+export default Navbar;
+
+--navbar.css
+ul {
+    list-style-type: none; /* Removes bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Makes the list items horizontal */
+    justify-content: flex-start; /* Aligns items to the start of the container */
+    background-color: white; /* Dark background color */
+  }
+  
+  /* Styling for individual list items */
+  li {
+    padding: 15px 20px; /* Add padding for spacing within each link */
+  }
+  
+  /* Styling for NavLink component */
+  .nav-links a {
+    color: black; /* White text color */
+    text-decoration: none; /* Removes the underline from links */
+    font-family: Arial, sans-serif; /* Readable font */
+    font-size: 1.1em; /* Adjust font size as needed */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+  }
+  
+  /* Hover and active states for better user experience */
+  .nav-links a:hover,
+  .nav-links a.active { /* Use a.active for NavLink active state */
+    color: green; /* Slightly lighter background on hover/active */
+  }
+
+--Favorites.js
+import React, { useState, useEffect } from 'react';
+// import "../components/downloads.css";
+
+function Favorites() {
+  const [showModal, setShowModal] = useState(false);
+  const [downloads, setDownloads] = useState([]); // Imagine this would come from an API or other source
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  // Close modal when clicking outside of it
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (showModal && event.target.closest('.modal-content') === null) {
+        setShowModal(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [showModal]); // Close modal when clicking outside of it
+}
+
+  export default Favorites;
