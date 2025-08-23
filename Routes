@@ -69,4 +69,34 @@ root.render(
 
 
 
+import React, { useState } from "react";
+ 
+import UsersPage from "./components/AdminUser/pages/UserPages";
+import ReportsPage from "./components/AdminUser/pages/ReportsPages";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+ 
+import "bootstrap/dist/css/bootstrap.min.css";
+ 
+import AdminLayout from "./components/AdminUser/Layouts/AdminLayout";
+import DashboardPage from "./components/AdminUser/pages/DashboardPage";
+ 
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="users" replace />} />
+          <Route path="users" element={<UsersPage/>} />
+          <Route path="reports" element={<ReportsPage/>} />
+        </Route>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="*" element={<Navigate to="/admin" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+ 
+export default App;
+ 
+
 
