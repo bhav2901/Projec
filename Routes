@@ -14,41 +14,40 @@ import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
-    <div className="bg-light">
-      {/* Page title */}
-      <header className="py-2 text-center user-title">
-        <h1 className="mb-0">User Dashboard</h1>
-      </header>
+    <div className="container-fluid">
+      <div className="row flex-nowrap">
+        {/* Sidebar (left column, full height) */}
+        <Sidebar />
 
-      <div className="container-fluid px-4">
-        <div className="row gx-3">
-          {/* LEFT: Sidebar */}
-          <Sidebar />
+        {/* Main content (right column) */}
+        <div className="col py-3 bg-light d-flex flex-column" style={{ minHeight: "100vh" }}>
+          {/* Page title */}
+          <header className="py-2 text-center user-title">
+            <h1 className="mb-0">User Dashboard</h1>
+          </header>
 
-          {/* RIGHT: Main content */}
-          <main className="col-md-9 col-lg-10">
-            <Navbar />
-            <TopBlue />
+          {/* Navbar stays at top */}
+          <Navbar />
 
-            <div className="container mt-3">
-              <Routes>
-                <Route path="/" element={<FilesPanel />} />
-                <Route path="/downloads" element={<Downloads />} />
-                <Route path="/favorites" element={<Favorites />} />
+          {/* TopBlue bar */}
+          <TopBlue />
 
-                {/* Catch-all: redirect unknown routes to dashboard */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </div>
-          </main>
+          {/* Routed content */}
+          <div className="flex-grow-1 mt-3">
+            <Routes>
+              <Route path="/" element={<FilesPanel />} />
+              <Route path="/downloads" element={<Downloads />} />
+              <Route path="/favorites" element={<Favorites />} />
+
+              {/* Redirect unknown routes */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-
-export default App;
 
 
 
