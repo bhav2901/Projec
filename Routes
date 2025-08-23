@@ -1,54 +1,43 @@
-1) ---src/RoutesConfig.js
-
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-
-import FilesPanel from "./components/Filespanel/FilesPanel";
-import Downloads from "./components/Downloads";
-import Favorites from "./components/Favorites";
-
-export default function RoutesConfig() {
-  return (
-    <Routes>
-      <Route path="/" element={<FilesPanel />} />
-      <Route path="/downloads" element={<Downloads />} />
-      <Route path="/favorites" element={<Favorites />} />
-      {/* Add more routes here if needed */}
-    </Routes>
-  );
-}
-
-
 
 
 2)src/App.js
 
 import React from "react";
 import Sidebar from "./components/Sidebars/Sidebar";
-import Navbar from "./components/Navbar";
 import TopBlue from "./components/TopBlue";
-import RoutesConfig from "./RoutesConfig";
+import FilesPanel from "./components/Filespanel/FilesPanel";
+import Downloads from "./components/Downloads";
+import { Routes, Route } from "react-router-dom";  // ✅ no BrowserRouter here
+import Navbar from "./components/Navbar";
+import Favorites from "./components/Favorites";
 
 export default function App() {
   return (
     <div className="bg-light">
-      {/* Page Title */}
       <header className="py-2 text-center user-title">
-        <h1 className="mb-0">User Dashboard</h1>
+        {/* <h1 className="mb-0">User Dashboard</h1> */}
       </header>
 
       <div className="container-fluid px-4">
         <div className="row gx-3">
-          {/* LEFT Sidebar (untouched code) */}
+          {/* LEFT: Sidebar */}
           <Sidebar />
 
-          {/* RIGHT Main */}
+          {/* RIGHT: Main */}
           <main className="col-md-9 col-lg-10">
             <Navbar />
-            <TopBlue />
-            <div className="container mt-3">
-              <RoutesConfig />
-            </div>
+
+            {/* ✅ Routes go directly here */}
+            <Routes>
+              <Route path="/" element={
+                <>
+                  <TopBlue />
+                  <FilesPanel />
+                </>
+              } />
+              <Route path="/downloads" element={<Downloads />} />
+              <Route path="/favorites" element={<Favorites />} />
+            </Routes>
           </main>
         </div>
       </div>
@@ -60,17 +49,13 @@ export default function App() {
 
 
 
+
 3) src/index.js
 
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-
-// Bootstrap & Icons
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "./index.css"; // keep your custom CSS
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
