@@ -2,22 +2,22 @@
 
 2)src/App.js
 
+// src/App.js
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebars/Sidebar";
 import TopBlue from "./components/TopBlue";
 import FilesPanel from "./components/Filespanel/FilesPanel";
 import Downloads from "./components/Downloads";
-import Favorites from "./components/Favorites";
 import Navbar from "./components/Navbar";
-import { Routes, Route } from "react-router-dom";
+import Favorites from "./components/Favorites";
 
 export default function App() {
   return (
     <div className="bg-light">
-      {/* Header */}
+      {/* Page title */}
       <header className="py-2 text-center user-title">
-        {/* Example logo/title (optional) */}
-        {/* <h1 className="mb-0">User Dashboard</h1> */}
+        <h1 className="mb-0">User Dashboard</h1>
       </header>
 
       <div className="container-fluid px-4">
@@ -28,21 +28,11 @@ export default function App() {
           {/* RIGHT: Main */}
           <main className="col-md-9 col-lg-10">
             <Navbar />
+            <TopBlue />
 
-            {/* ✅ Centralized routing */}
+            {/* Routing handled here */}
             <Routes>
-              {/* Dashboard default */}
-              <Route
-                path="/"
-                element={
-                  <>
-                    <TopBlue />
-                    <FilesPanel />
-                  </>
-                }
-              />
-
-              {/* Other pages */}
+              <Route path="/" element={<FilesPanel />} />
               <Route path="/downloads" element={<Downloads />} />
               <Route path="/favorites" element={<Favorites />} />
             </Routes>
@@ -59,14 +49,14 @@ export default function App() {
 
 
 
+
 3) src/index.js
 
+// src/index.js
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -75,6 +65,7 @@ root.render(
     <App />
   </BrowserRouter>
 );
+
 
 
 
