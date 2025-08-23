@@ -13,10 +13,10 @@ export default function RoutesConfig() {
       <Route path="/" element={<FilesPanel />} />
       <Route path="/downloads" element={<Downloads />} />
       <Route path="/favorites" element={<Favorites />} />
-      {/* Add more routes here later */}
     </Routes>
   );
 }
+
 
 
 2)src/App.js
