@@ -173,3 +173,143 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
+New 
+
+
+
+1) --- sidebar.css
+
+
+.sidebar {
+  background-color: #2f3b52; /* dark bg */
+  min-height: 100vh;        /* take full screen height */
+  padding: 1rem;
+}
+
+.btn-toggle {
+  background: transparent;
+  color: white !important;
+  border: none;
+}
+
+.btn-toggle:hover {
+  opacity: 0.85;
+}
+
+
+2) --- sidebar.js 
+
+
+
+import React, { useState } from "react";
+import "../Sidebars/sidebar.css";
+
+/**
+ * Matches your folder tree:
+ * - SCB
+ * - General (collapsible)
+ *   - Reports (collapsible)
+ * - Credit
+ *   - General (collapsible)
+ */
+export default function Sidebar() {
+  const [openGeneral, setOpenGeneral] = useState(true);
+  const [openReports, setOpenReports] = useState(false);
+  const [openCreditGeneral, setOpenCreditGeneral] = useState(false);
+
+  return (
+    <aside className="col-md-3 col-lg-2 pe-0">
+      <div
+        className="sidebar border rounded-start shadow-sm"
+        style={{
+          backgroundColor: "#2f3b52", // dark background so white text shows
+          minHeight: "100vh", // full height sidebar
+          paddingTop: "1rem",
+        }}
+      >
+        {/* SCB root */}
+        <div className="folder-item mb-2">
+          <div className="d-flex align-items-center">
+            <i className="bi bi-folder2-fill folder-icon" style={{ color: "white" }}></i>
+            <span className="fw-medium" style={{ color: "white" }}>SCB</span>
+          </div>
+        </div>
+
+        {/* General group */}
+        <div className="folder-group mt-3">
+          <button
+            className="btn btn-toggle w-100 text-start d-flex align-items-center"
+            onClick={() => setOpenGeneral(v => !v)}
+          >
+            <i className="bi bi-folder me-2" style={{ color: "white" }}></i>
+            <span style={{ color: "white" }}>General</span>
+            <i
+              className={`bi ms-auto rotate-icon ${
+                openGeneral ? "bi-caret-down-fill rotated" : "bi-caret-right-fill"
+              }`}
+              style={{ color: "white" }}
+            ></i>
+          </button>
+
+          {openGeneral && (
+            <div className="ps-3 pt-2">
+              <button
+                className="btn btn-toggle w-100 text-start d-flex align-items-center"
+                onClick={() => setOpenReports(v => !v)}
+              >
+                <i className="bi bi-folder me-2" style={{ color: "white" }}></i>
+                <span style={{ color: "white" }}>Reports</span>
+                <i
+                  className={`bi ms-auto rotate-icon-small ${
+                    openReports ? "bi-caret-down-fill rotated" : "bi-caret-right-fill"
+                  }`}
+                  style={{ color: "white" }}
+                ></i>
+              </button>
+              {openReports && (
+                <div className="ps-3 pt-2" style={{ color: "white" }}>
+                  <div className="small text-white">(no items)</div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Credit group */}
+        <div className="mt-3">
+          <div className="d-flex align-items-center">
+            <i className="bi bi-folder2-fill folder-icon" style={{ color: "white" }}></i>
+            <span className="fw-medium" style={{ color: "white" }}>Credit</span>
+          </div>
+
+          <div className="mt-2 ps-3">
+            <button
+              className="btn btn-toggle w-100 text-start d-flex align-items-center"
+              style={{ paddingLeft: 0 }}
+              onClick={() => setOpenCreditGeneral(v => !v)}
+            >
+              <i className="bi bi-folder me-2" style={{ color: "white" }}></i>
+              <span style={{ color: "white" }}>Credit Risk</span>
+              <i
+                className={`bi ms-auto rotate-icon-small ${
+                  openCreditGeneral ? "bi-caret-down-fill rotated" : "bi-caret-right-fill"
+                }`}
+                style={{ color: "white" }}
+              ></i>
+            </button>
+            {openCreditGeneral && (
+              <div className="ps-3 pt-2">
+                <div className="small text-white">(empty)</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
