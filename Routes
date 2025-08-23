@@ -7,18 +7,13 @@ import FilesPanel from "./components/Filespanel/FilesPanel";
 import Downloads from "./components/Downloads";
 import Favorites from "./components/Favorites";
 
-// Later you can add:
-// import Settings from "./components/Settings";
-// import Profile from "./components/Profile";
-
 export default function RoutesConfig() {
   return (
     <Routes>
       <Route path="/" element={<FilesPanel />} />
       <Route path="/downloads" element={<Downloads />} />
       <Route path="/favorites" element={<Favorites />} />
-      {/* Future pages go here */}
-      {/* <Route path="/settings" element={<Settings />} /> */}
+      {/* Add more routes here if needed */}
     </Routes>
   );
 }
@@ -44,17 +39,15 @@ export default function App() {
 
       <div className="container-fluid px-4">
         <div className="row gx-3">
-          {/* LEFT Sidebar */}
-          <aside className="col-md-3 col-lg-2 pe-0">
-            <Sidebar />
-          </aside>
+          {/* LEFT Sidebar (untouched code) */}
+          <Sidebar />
 
           {/* RIGHT Main */}
           <main className="col-md-9 col-lg-10">
             <Navbar />
             <TopBlue />
             <div className="container mt-3">
-              <RoutesConfig /> {/* ✅ Centralized routes */}
+              <RoutesConfig />
             </div>
           </main>
         </div>
@@ -65,6 +58,8 @@ export default function App() {
 
 
 
+
+
 3) src/index.js
 
 import React from "react";
@@ -72,9 +67,10 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
+// Bootstrap & Icons
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "./index.css";
+import "./index.css"; // keep your custom CSS
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -84,31 +80,4 @@ root.render(
 );
 
 
-4) src/components/Sidebars/Sidebar.js
 
-import React from "react";
-import { Link } from "react-router-dom";
-
-export default function Sidebar() {
-  return (
-    <div className="sidebar border rounded-start shadow-sm bg-white p-3">
-      <h5 className="mb-3">SCB</h5>
-
-      <div className="list-group">
-        <Link to="/" className="list-group-item list-group-item-action">
-          Dashboard
-        </Link>
-        <Link to="/downloads" className="list-group-item list-group-item-action">
-          Downloads
-        </Link>
-        <Link to="/favorites" className="list-group-item list-group-item-action">
-          Favorites
-        </Link>
-        {/* Example future merge */}
-        {/* <Link to="/settings" className="list-group-item list-group-item-action">
-          Settings
-        </Link> */}
-      </div>
-    </div>
-  );
-}
