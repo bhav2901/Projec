@@ -313,3 +313,282 @@ export default function Sidebar() {
   );
 }
 
+3) Filespanel.js
+
+
+import React, { useMemo, useState } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../Filespanel/filespanel.css";
+
+const initialFiles = [
+  { title: "Account Statement -Jan 2025", type: "Pdf", date: "2025-01-20" },
+  { title: "Monthly Report -Dec 2024", type: "Txt", date: "2024-12-31" },
+  { title: "Loan Summary 2024", type: "Pdf", date: "2024-11-12" },
+  { title: "Credit Report -Oct", type: "Pdf", date: "2024-10-05" },
+  { title: "Summary -Q3 2024", type: "docx", date: "2024-09-30" },
+];
+
+export default function FilesPanel() {
+  const [query, setQuery] = useState("");
+  const [sortAsc, setSortAsc] = useState(false);
+  const [fav, setFav] = useState(false);
+  const [typeFilter, setTypeFilter] = useState("All");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+
+    let base = initialFiles;
+
+    if (q) {
+      base = base.filter(
+        (f) =>
+          f.title.toLowerCase().includes(q) || f.type.toLowerCase().includes(q)
+      );
+    }
+    if (typeFilter !== "All") {
+      base = base.filter((f) => f.type === typeFilter);
+    }
+
+    base.sort((a, b) => {
+      const da = new Date(a.date);
+      const db = new Date(b.date);
+      return sortAsc ? da - db : db - da;
+    });
+
+    return base;
+  }, [query, sortAsc, typeFilter]);
+
+  const downloadOne = (file) => {
+    alert("Downloaded: " + file.title);
+  };
+
+  const downloadAll = () => {
+    alert("Download all (demo).");
+  };
+
+  return (
+    <div className="card content-card shadow-sm mt-3">
+      {/* Header strip */}
+      <div className="card-header bg-primary text-white d-flex align-items-center">
+        <div className="flex-grow-1">
+          <div className="input-group" style={{ maxWidth: "250px" }}>
+            <span className="input-group-text">
+              <i className="bi bi-search" style={{ color: "black" }}></i>
+            </span>
+            <input
+              type="search"
+              className="form-control"
+              placeholder="Search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="ms-3 d-flex align-items-center gap-2">
+          <button
+            id="favBtn"
+            className="btn btn-outline-light btn-sm"
+            style={{ borderColor: "white" }}
+            onClick={() => setFav((v) => !v)}
+            title="Favorite"
+          >
+            <i
+              className={`bi ${fav ? "bi-heart-fill" : "bi-heart"}`}
+              style={{ color: "white" }}
+            ></i>
+          </button>
+          <button
+            id="downloadAll"
+            className="btn btn-outline-light btn-sm"
+            style={{ borderColor: "white" }}
+            onClick={downloadAll}
+            title="Download all"
+          >
+            <i className="bi bi-download" style={{ color: "white" }}></i>
+          </button>
+        </div>
+      </div>
+
+      <div className="card-body p-4">
+        {/* Header row */}
+        <div className="d-flex align-items-center mb-3">
+          <i className="bi bi-folder2-open display-6 text-secondary me-2"></i>
+          <h4 className="mb-0">General</h4>
+
+          <div className="ms-auto d-flex align-items-center gap-3">
+            <Dropdown onSelect={(eventKey) => setTypeFilter(eventKey)}>
+              <Dropdown.Toggle
+                variant="link"
+                id="typeDropdown"
+                className="p-0 text-decoration-none text-body"
+              >
+                Type
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="All">All</Dropdown.Item>
+                <Dropdown.Item eventKey="Pdf">Pdf</Dropdown.Item>
+                <Dropdown.Item eventKey="Txt">Txt</Dropdown.Item>
+                <Dropdown.Item eventKey="docx">docx</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <div>
+              Date{" "}
+              <button
+                id="sortDateBtn"
+                className="btn btn-link btn-sm p-0 ms-1"
+                onClick={() => setSortAsc((v) => !v)}
+                title="Toggle date sort"
+              >
+                <i
+                  className={`bi ${
+                    sortAsc ? "bi-caret-up-fill" : "bi-caret-down-fill"
+                  }`}
+                ></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Table */}
+        <table className="table table-hover table-sm">
+          <thead>
+            <tr className="small text-muted text-center">
+              <th className="text-start">Title</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th className="text-end"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((f, idx) => (
+              <tr className="file-row" key={idx}>
+                <td>
+                  <div className="d-flex align-items-center">
+                    <div className="file-square me-2"></div>
+                    <div>
+                      <div>{f.title}</div>
+                      <div className="small text-muted">{f.title}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="text-muted text-center">{f.type}</td>
+                <td className="text-muted text-center">{f.date}</td>
+                <td className="text-end">
+                  <button
+                    className="download-circle"
+                    onClick={() => downloadOne(f)}
+                    title="Download"
+                  >
+                    <i className="bi bi-download"></i>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Pagination */}
+        <div className="d-flex justify-content-end align-items-center small text-muted">
+          <span className="me-2">page</span>
+          <span className="page-pill">1</span>
+          <button className="btn btn-link btn-sm p-0 ms-2" title="Next page">
+            <i className="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+5) Filespanel.css
+
+
+.files-panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 15px;
+  padding: 10px;
+}
+
+/* Ensure table layout */
+.files-panel table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Small placeholder box if needed */
+.placeholder-box {
+  width: 80px;
+  height: 15px;
+  background: #eee;
+  border-radius: 3px;
+}
+
+/* Align columns properly */
+.col-2 {
+  display: flex;
+  align-items: center;
+}
+
+/* Typography */
+.file-title-font {
+  font-family: "Georgia", serif;
+}
+
+.file-type-date-font {
+  font-family: "Verdana", sans-serif;
+}
+
+/* ✅ FIX: don't override Bootstrap's .text-start */
+.text-start {
+  text-align: left !important;
+}
+
+/* Dark primary header color */
+.bg-primary {
+  background-color: #020b43 !important;
+}
+
+/* Link-style buttons (like sort) */
+.btn-link {
+  color: black;
+  text-decoration: none;
+}
+
+/* File square indicator */
+.file-square {
+  width: 20px;
+  height: 20px;
+  background-color: #2f3b52;
+  border-radius: 4px;
+}
+
+/* Download button circle */
+.download-circle {
+  background: transparent;
+  border: 1px solid #2f3b52;
+  border-radius: 50%;
+  padding: 5px 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.download-circle:hover {
+  background: #2f3b52;
+  color: white;
+}
+
+/* Page number pill */
+.page-pill {
+  background: #020b43;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
