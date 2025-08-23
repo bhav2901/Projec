@@ -35,8 +35,6 @@ export default function App() {
         {/* Page Title */}
         <header className="py-2 text-center user-title">
           <h1 className="mb-0">User Dashboard</h1>
-          {/* Or use a logo image:
-          <img src="/sc.png" alt="Logo" className="logo-img me-2" /> */}
         </header>
 
         <div className="container-fluid px-4">
@@ -51,7 +49,7 @@ export default function App() {
               <Navbar />
               <TopBlue />
               <div className="container mt-3">
-                <RoutesConfig />
+                <RoutesConfig /> {/* ✅ only this renders routes */}
               </div>
             </main>
           </div>
@@ -60,6 +58,7 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
 
 3) src/index.js
 
