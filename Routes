@@ -112,3 +112,153 @@ export default App;
  
 
 
+
+
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import Sidebar from "./components/Sidebars/Sidebar";
+import TopBlue from "./components/TopBlue";
+import FilesPanel from "./components/Filespanel/FilesPanel";
+import Downloads from "./components/Downloads";
+import Favorites from "./components/Favorites";
+import Navbar from "./components/Navbar";
+
+function App() {
+  return (
+    <div className="bg-light">
+      {/* Top title or logo */}
+      <header className="py-2 text-center user-title">
+        {/* <h1 className="mb-0">User Dashboard</h1> */}
+      </header>
+
+      <div className="container-fluid px-4">
+        <div className="row gx-3">
+          {/* Sidebar always visible */}
+          <Sidebar />
+
+          {/* Right: content based on route */}
+          <main className="col-md-9 col-lg-10">
+            <Navbar />
+
+            <Routes>
+              {/* Default dashboard */}
+              <Route
+                path="/"
+                element={
+                  <>
+                    <TopBlue />
+                    <FilesPanel />
+                  </>
+                }
+              />
+
+              {/* Extra pages */}
+              <Route path="/downloads" element={<Downloads />} />
+              <Route path="/favorites" element={<Favorites />} />
+
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+
+
+5) -- Navbar.js
+
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import '../components/navbar.css';
+
+// ModalPopup component
+const ModalPopup = ({ showModalPopup, onPopupClose, downloadLink, popupContent }) => {
+  return (
+    <>
+      {showModalPopup && (
+        <div className="modal-overlay" onClick={() => onPopupClose(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            {popupContent ? (
+              popupContent
+            ) : (
+              <>
+                <h2>Download Options</h2>
+                <p>Choose your download option:</p>
+                <a href={downloadLink} download="your-file.pdf">
+                  <button style={{ borderWidth: 1, padding: 5, margin: 10 }}>Download File</button>
+                </a>
+                <button
+                  onClick={() => onPopupClose(false)}
+                  style={{ borderWidth: 2, width: 450, display: 'grid' }}
+                >
+                  Close
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const Navbar = () => {
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false);
+  const [showFavoritesPopup, setShowFavoritesPopup] = useState(false);
+
+  const toggleDownloadPopup = () => {
+    setShowDownloadPopup(!showDownloadPopup);
+  };
+
+  const toggleFavoritesPopup = () => {
+    setShowFavoritesPopup(!showFavoritesPopup);
+  };
+
+  return (
+    <>
+      <ul className="nav-links">
+        <li>
+          <NavLink to="/downloads" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <button onClick={toggleDownloadPopup} style={{ borderWidth: 1, borderColor: 'black' }}>
+              Downloads
+            </button>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/favorites" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <button onClick={toggleFavoritesPopup} style={{ borderWidth: 1, borderColor: 'black' }}>
+              Favorites
+            </button>
+          </NavLink>
+        </li>
+      </ul>
+
+      {/* Download Popup */}
+      <ModalPopup
+        showModalPopup={showDownloadPopup}
+        onPopupClose={toggleDownloadPopup}
+        downloadLink="/path/to/your-file.pdf"
+      />
+
+      {/* Favorites Popup */}
+      <ModalPopup
+        showModalPopup={showFavoritesPopup}
+        onPopupClose={toggleFavoritesPopup}
+        popupContent={
+          <>
+            <h2>Your Favorites</h2>
+            <p>This is your list of favorite items!</p>
+            <button onClick={toggleFavoritesPopup}>Close</button>
+          </>
+        }
+      />
+    </>
+  );
+};
+
+export default Navbar;
