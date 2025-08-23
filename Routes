@@ -7,14 +7,16 @@ import Sidebar from "./components/Sidebars/Sidebar";
 import TopBlue from "./components/TopBlue";
 import FilesPanel from "./components/Filespanel/FilesPanel";
 import Downloads from "./components/Downloads";
-import { Routes, Route } from "react-router-dom";  // ✅ no BrowserRouter here
-import Navbar from "./components/Navbar";
 import Favorites from "./components/Favorites";
+import Navbar from "./components/Navbar";
+import { Routes, Route } from "react-router-dom";
 
 export default function App() {
   return (
     <div className="bg-light">
+      {/* Header */}
       <header className="py-2 text-center user-title">
+        {/* Example logo/title (optional) */}
         {/* <h1 className="mb-0">User Dashboard</h1> */}
       </header>
 
@@ -27,14 +29,20 @@ export default function App() {
           <main className="col-md-9 col-lg-10">
             <Navbar />
 
-            {/* ✅ Routes go directly here */}
+            {/* ✅ Centralized routing */}
             <Routes>
-              <Route path="/" element={
-                <>
-                  <TopBlue />
-                  <FilesPanel />
-                </>
-              } />
+              {/* Dashboard default */}
+              <Route
+                path="/"
+                element={
+                  <>
+                    <TopBlue />
+                    <FilesPanel />
+                  </>
+                }
+              />
+
+              {/* Other pages */}
               <Route path="/downloads" element={<Downloads />} />
               <Route path="/favorites" element={<Favorites />} />
             </Routes>
@@ -50,12 +58,16 @@ export default function App() {
 
 
 
+
 3) src/index.js
 
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -63,6 +75,7 @@ root.render(
     <App />
   </BrowserRouter>
 );
+
 
 
 
