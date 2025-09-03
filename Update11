@@ -241,15 +241,6 @@ export default OpsDashboardPage;
 
 
 
-
-
-
-
-
-
-
-
-
 //OpsDashboardpage.js
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -320,37 +311,29 @@ const filteredReports = useMemo(() => {
     });  
 }, [reports, searchTerm, categoryFilter, dateFilter, typeFilter]);  
 
-// UPDATED: Accept an optional list of reports (for per-category select all).
-// When called without the second arg, it defaults to selecting all filteredReports.
-const handleSelectAll = (e, reportsToSelect = filteredReports) => {
-    const idsToToggle = reportsToSelect.map(r => r.id);
-
-    if (e.target.checked) {
-        // Add idsToToggle to selectedReports without duplicating existing selections
-        setSelectedReports(prev => {
-            const set = new Set(prev);
-            idsToToggle.forEach(id => set.add(id));
-            return Array.from(set);
-        });
-    } else {
-        // Remove idsToToggle from selectedReports but keep other selections
-        setSelectedReports(prev => prev.filter(id => !idsToToggle.includes(id)));
-    }
+// ✅ FIXED: Ensure IDs stored as strings for consistency
+const handleSelectAll = (e) => {  
+    if (e.target.checked) {  
+        setSelectedReports(filteredReports.map(r => String(r.id)));  
+    } else {  
+        setSelectedReports([]);  
+    }  
 };  
 
+// ✅ FIXED: Normalize ID to string
 const handleSelectOne = (e, id) => {  
+    const stringId = String(id);  
     if (e.target.checked) {  
-        // Avoid duplicates
-        setSelectedReports((prev) => prev.includes(id) ? prev : [...prev, id]);  
+        setSelectedReports((prev) => [...prev, stringId]);  
     } else {  
-        setSelectedReports(prev => prev.filter(reportId => reportId !== id));  
+        setSelectedReports(prev => prev.filter(reportId => reportId !== stringId));  
     }  
 };  
 
 const handleAddToFavorites = () => {  
     setReports(prevReports =>  
         prevReports.map(report =>  
-            selectedReports.includes(report.id) ? { ...report, isFavorite: true } : report  
+            selectedReports.includes(String(report.id)) ? { ...report, isFavorite: true } : report  
         )  
     );  
     alert(`${selectedReports.length} report(s) added to favorites!`);  
@@ -359,7 +342,7 @@ const handleAddToFavorites = () => {
 
 // UPDATED: This function now updates the download history  
 const handleDownload = (reportIds) => {  
-    const reportsToDownload = reports.filter(r => reportIds.includes(r.id));  
+    const reportsToDownload = reports.filter(r => reportIds.includes(String(r.id)));  
     if (reportsToDownload.length === 0) {  
         setShowModal('downloads'); // Open the modal even if no files are selected  
         return;  
@@ -411,10 +394,8 @@ return (
                                         <input   
                                             type="checkbox"   
                                             className="form-check-input"  
-                                            // UPDATED: Select only the reports in this category (reportsInCategory)
-                                            onChange={(e) => handleSelectAll(e, reportsInCategory)}  
-                                            // UPDATED: checked if every report in this category is selected
-                                            checked={reportsInCategory.length > 0 && reportsInCategory.every(r => selectedReports.includes(r.id))}  
+                                            onChange={handleSelectAll}  
+                                            checked={selectedReports.length === filteredReports.length && filteredReports.length > 0}  
                                         />  
                                     </th>  
                                     <th>Title</th>  
@@ -430,7 +411,7 @@ return (
                                             <input   
                                                 type="checkbox"   
                                                 className="form-check-input"  
-                                                checked={selectedReports.includes(report.id)}  
+                                                checked={selectedReports.includes(String(report.id))}  
                                                 onChange={(e) => handleSelectOne(e, report.id)}  
                                             />  
                                         </td>  
@@ -443,7 +424,7 @@ return (
                                         <td>  
                                             <FiDownload   
                                                 className={styles.downloadIcon}   
-                                                onClick={() => handleDownload([report.id])}  
+                                                onClick={() => handleDownload([String(report.id)])}  
                                             />  
                                         </td>  
                                     </tr>  
@@ -499,3 +480,14 @@ return (
 };
 
 export default OpsDashboardPage;
+
+
+
+
+
+
+
+
+
+  
+                
